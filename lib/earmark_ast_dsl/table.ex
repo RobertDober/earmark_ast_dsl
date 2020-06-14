@@ -4,6 +4,7 @@ defmodule EarmarkAstDsl.Table do
   use EarmarkAstDsl.Types
   import EarmarkAstDsl.Atts, only: [to_attributes: 1]
 
+  @spec make_table_rows(content_t(), free_atts_t()) :: ast_ts()
   def make_table_rows(rows, atts)
 
   def make_table_rows(rows, atts) when is_list(atts) do
@@ -21,12 +22,14 @@ defmodule EarmarkAstDsl.Table do
     end
   end
 
+  @spec _make_table_body(content_t(), map()) :: ast_t()
   defp _make_table_body(rows, atts) do
     {"tbody", [],
      rows
      |> Enum.map(&_make_table_row(&1, atts))}
   end
 
+  @spec _make_table_cell(content_t(), map(), binary()) :: ast_t()
   defp _make_table_cell(cell, atts, tag \\ "td")
 
   defp _make_table_cell(cell, atts, tag) when is_binary(cell),
@@ -37,6 +40,7 @@ defmodule EarmarkAstDsl.Table do
     {tag, [{"style", style}], cell}
   end
 
+  @spec _make_table_head(content_t(), map()) :: maybe(ast_t())
   defp _make_table_head(celles, atts)
   defp _make_table_head(nil, _atts), do: nil
 
@@ -51,6 +55,7 @@ defmodule EarmarkAstDsl.Table do
      ]}
   end
 
+  @spec _make_table_row(content_t(), map()) :: ast_t()
   defp _make_table_row(row, atts)
   defp _make_table_row(row, atts) when is_binary(row), do: _make_table_row([row], atts)
 

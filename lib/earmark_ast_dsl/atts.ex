@@ -3,7 +3,19 @@ defmodule EarmarkAstDsl.Atts do
 
   use EarmarkAstDsl.Types
 
-  @spec only_atts(general_t()) :: att_ts()
+  @spec make_atts(list({any(), any()})) :: att_ts()
+  def make_atts(atts)
+  def make_atts(atts) when is_map(atts) do
+    atts
+    |> Enum.into([])
+    |> make_atts()
+  end
+  def make_atts(atts) do
+    atts
+    |> Enum.map(fn {k, v} -> {to_string(k), to_string(v)} end)
+  end
+
+  @spec only_atts(free_atts_t()) :: att_ts()
   def only_atts(atts)
   def only_atts(atts) when is_map(atts), do: atts |> Enum.into([]) |> only_atts()
   def only_atts(atts) do
@@ -11,7 +23,7 @@ defmodule EarmarkAstDsl.Atts do
     |> Enum.filter(&_string_key?/1)
   end
 
-  @spec to_attributes(general_t()) :: att_ts()
+  @spec to_attributes(free_atts_t()) :: att_ts()
   def to_attributes(atts)
   def to_attributes(atts) when is_list(atts), do: atts
   def to_attributes(atts), do: atts |> Enum.into([]) |> Enum.map(&_key_to_string/1)
