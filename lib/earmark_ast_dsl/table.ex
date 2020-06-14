@@ -1,6 +1,8 @@
 defmodule EarmarkAstDsl.Table do
   @moduledoc false
 
+  use EarmarkAstDsl.Types
+  import EarmarkAstDsl.Atts, only: [to_attributes: 1]
 
   def make_table_rows(rows, atts)
 
@@ -39,7 +41,7 @@ defmodule EarmarkAstDsl.Table do
   defp _make_table_head(nil, _atts), do: nil
 
   defp _make_table_head(cells, atts) do
-    atts1 = Map.delete(atts, :head) |> IO.inspect()  |> _to_attributes()
+    atts1 = Map.delete(atts, :head) |> to_attributes()
 
     {"thead", atts1,
      [
@@ -57,10 +59,4 @@ defmodule EarmarkAstDsl.Table do
      row
      |> Enum.map(&_make_table_cell(&1, atts))}
   end
-
-  defp _key_to_string({k, v}), do: {to_string(k), v}
-
-  defp _to_attributes(atts)
-  defp _to_attributes(atts) when is_list(atts), do: atts
-  defp _to_attributes(atts), do: atts |> Enum.into([]) |> Enum.map(&_key_to_string/1)
 end
