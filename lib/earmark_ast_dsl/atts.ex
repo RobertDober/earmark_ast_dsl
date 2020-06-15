@@ -3,6 +3,12 @@ defmodule EarmarkAstDsl.Atts do
 
   use EarmarkAstDsl.Types
 
+  @spec as_list(content_t()) :: maybe(list())
+  def as_list(binary_or_list)
+  def as_list(binary) when is_binary(binary), do: [binary]
+  def as_list(list) when is_list(list), do: list
+  def as_list(_), do: nil
+
   @spec make_atts(list({any(), any()})) :: att_ts()
   def make_atts(atts)
   def make_atts(atts) when is_map(atts) do

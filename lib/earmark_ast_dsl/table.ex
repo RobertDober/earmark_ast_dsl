@@ -2,7 +2,7 @@ defmodule EarmarkAstDsl.Table do
   @moduledoc false
 
   use EarmarkAstDsl.Types
-  import EarmarkAstDsl.Atts, only: [to_attributes: 1]
+  import EarmarkAstDsl.Atts, only: [as_list: 1, to_attributes: 1]
 
   @spec make_table_rows(content_t(), free_atts_t()) :: ast_ts()
   def make_table_rows(rows, atts)
@@ -16,7 +16,7 @@ defmodule EarmarkAstDsl.Table do
   end
 
   def make_table_rows(rows, atts) do
-    case _make_table_head(Map.get(atts, :head), atts) do
+    case _make_table_head(Map.get(atts, :head)|>as_list(), atts) do
       nil -> _make_table_body(rows, atts)
       head -> [head, _make_table_body(rows, atts)]
     end

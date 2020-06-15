@@ -83,5 +83,28 @@ defmodule EarmarkAstDsl.TableTest do
 
       assert actual == expect
     end
+
+    test "with strings" do
+      actual = table("data", head: "header")
+
+      expect =
+        {"table", [],
+         [
+           {"thead", [],
+            [
+              {"tr", [],
+               [
+                 {"th", [{"style", "text-align: left;"}], ["header"]}
+               ]}
+            ]},
+           {"tbody", [],
+            [
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["data"]}
+               ]}
+            ]}
+         ]}
+    end
   end
 end
