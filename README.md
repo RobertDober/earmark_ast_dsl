@@ -1,5 +1,10 @@
 # EarmarkAstDsl
 
+[![Build Status](https://travis-ci.org/robertdober/earmark_ast_dsl.svg?branch=master)](https://travis-ci.org/robertdober/earmark_ast_dsl)
+[![Hex.pm](https://img.shields.io/hexpm/v/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
+[![Hex.pm](https://img.shields.io/hexpm/dw/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
+[![Hex.pm](https://img.shields.io/hexpm/dt/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
+
 **TODO: Add description**
 
 ## Installation
