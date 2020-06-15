@@ -21,12 +21,7 @@ end
 
 ## API
 
-EarmarkAstDsl is a toolset to generate EarmarkParser conformant AST Nodes.
-
-Its main purpose is to remove boilerplate code from Earmark and
-EarmarkParser tests.
-Documentation for `EarmarkAstDsl`.
-
+<%= xtra.moduledoc("EarmarkAstDsl") %>
 
 
 Same doc can be found here (for latest release)
