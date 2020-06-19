@@ -5,7 +5,8 @@ defmodule EarmarkAstDsl do
   use EarmarkAstDsl.Types
 
   @moduledoc """
-  EarmarkAstDsl is a toolset to generate EarmarkParser conformant AST Nodes.
+  EarmarkAstDsl is a toolset to generate EarmarkParser conformant AST Nodes version 1.4.6 and on,
+  which is the _always return quadruples_ version.
 
   Its main purpose is to remove boilerplate code from Earmark and
   EarmarkParser tests.
@@ -16,26 +17,26 @@ defmodule EarmarkAstDsl do
   The most general helper is the tag function:
 
       iex(1)> tag("div", "Some content")
-      {"div", [], ["Some content"]}
+      {"div", [], ["Some content"], %{}}
 
   Content and attributes can be provided as arrays, ...
 
       iex(2)> tag("p", ~w[Hello World], class: "hidden")
-      {"p", [{"class", "hidden"}], ["Hello", "World"]}
+      {"p", [{"class", "hidden"}], ["Hello", "World"], %{}}
 
   ... or maps:
 
       iex(3)> tag("p", ~w[Hello World], %{class: "hidden"})
-      {"p", [{"class", "hidden"}], ["Hello", "World"]}
+      {"p", [{"class", "hidden"}], ["Hello", "World"], %{}}
         
 
   ### Shortcuts for `p` and `div`
 
       iex(4)> p("A para")
-      {"p", [], ["A para"]}
+      {"p", [], ["A para"], %{}}
 
       iex(5)> div(tag("span", "content"))
-      {"div", [], [{"span", [], ["content"]}]}
+      {"div", [], [{"span", [], ["content"]}], %{}}
 
   """
 
@@ -55,10 +56,10 @@ defmodule EarmarkAstDsl do
       {"table", [], [
         {"tbody", [], [
           {"tr", [], [
-            {"td", [{"style", "text-align: left;"}], ["one cell only"]}
-          ]}
-        ]}
-      ]}
+            {"td", [{"style", "text-align: left;"}], ["one cell only"], %{}}
+          ], %{}}
+        ], %{}}
+      ], %{}}
 
   Now if we want a header and have some more data:
 
@@ -66,21 +67,21 @@ defmodule EarmarkAstDsl do
       {"table", [], [
         {"thead", [], [
           {"tr", [], [
-            {"th", [{"style", "text-align: left;"}], ["left"]},
-            {"th", [{"style", "text-align: left;"}], ["right"]},
-          ]}
-        ]},
+            {"th", [{"style", "text-align: left;"}], ["left"], %{}},
+            {"th", [{"style", "text-align: left;"}], ["right"], %{}},
+          ], %{}}
+        ], %{}},
         {"tbody", [], [
           {"tr", [], [
-            {"td", [{"style", "text-align: left;"}], ["1-1"]},
-            {"td", [{"style", "text-align: left;"}], ["1-2"]},
-          ]},
+            {"td", [{"style", "text-align: left;"}], ["1-1"], %{}},
+            {"td", [{"style", "text-align: left;"}], ["1-2"], %{}},
+          ], %{}},
           {"tr", [], [
-            {"td", [{"style", "text-align: left;"}], ["2-1"]},
-            {"td", [{"style", "text-align: left;"}], ["2-2"]},
-          ]}
-        ]}
-      ]}
+            {"td", [{"style", "text-align: left;"}], ["2-1"], %{}},
+            {"td", [{"style", "text-align: left;"}], ["2-2"], %{}},
+          ], %{}}
+        ], %{}}
+      ], %{}}
 
   And tables can easily be aligned differently in Markdown, which makes some style helpers
   very useful
@@ -91,21 +92,21 @@ defmodule EarmarkAstDsl do
       {"table", [], [
         {"thead", [], [
           {"tr", [], [
-            {"th", [{"style", "text-align: right;"}], ["alpha"]},
-            {"th", [{"style", "text-align: center;"}], ["beta"]},
-          ]}
-        ]},
+            {"th", [{"style", "text-align: right;"}], ["alpha"], %{}},
+            {"th", [{"style", "text-align: center;"}], ["beta"], %{}},
+          ], %{}}
+        ], %{}},
         {"tbody", [], [
           {"tr", [], [
-            {"td", [{"style", "text-align: right;"}], ["1-1"]},
-            {"td", [{"style", "text-align: center;"}], ["1-2"]},
+            {"td", [{"style", "text-align: right;"}], ["1-1"], %{}},
+            {"td", [{"style", "text-align: center;"}], ["1-2"], %{}},
           ]},
           {"tr", [], [
-            {"td", [{"style", "text-align: right;"}], ["2-1"]},
-            {"td", [{"style", "text-align: center;"}], ["2-2"]},
-          ]}
-        ]}
-      ]}
+            {"td", [{"style", "text-align: right;"}], ["2-1"], %{}},
+            {"td", [{"style", "text-align: center;"}], ["2-2"], %{}},
+          ], %{}}
+        ], %{}}
+      ], %{}}
 
     Some leeway is given for the determination of the number of columns,
     bear in mind that Markdown only supports regularly shaped tables with
@@ -123,13 +124,13 @@ defmodule EarmarkAstDsl do
         {"table", [], [
           {"tbody", [], [
             {"tr", [], [
-              {"td", [{"style", "text-align: left;"}], ["alpha"]},
-            ]},
+              {"td", [{"style", "text-align: left;"}], ["alpha"], %{}},
+            ], %{}},
             {"tr", [], [
-              {"td", [{"style", "text-align: left;"}], ["beta", {"em", [], ["gamma"]}]}
-            ]}
-          ]}
-        ]}
+              {"td", [{"style", "text-align: left;"}], ["beta", {"em", [], ["gamma"]}], %{}}
+            ], %{}}
+          ], %{}}
+        ], %{}}
 
   """
   @spec table(table_t(), free_atts_t()) :: ast_t()

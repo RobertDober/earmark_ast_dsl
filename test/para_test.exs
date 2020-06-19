@@ -6,28 +6,28 @@ defmodule EarmarkAstDsl.ParaTest do
   describe "para w/o atts" do
     test "empty" do
       actual = p()
-      expect = {"p", [], []}
+      expect = {"p", [], [], %{}}
 
       assert actual == expect
     end
 
     test "one child -> []" do
       actual = p("hello")
-      expect = {"p", [], ["hello"]}
+      expect = {"p", [], ["hello"], %{}}
 
       assert actual == expect
     end
 
     test "still one child" do
       actual = p(~w[world])
-      expect = {"p", [], ["world"]}
+      expect = {"p", [], ["world"], %{}}
 
       assert actual == expect
     end
 
     test "more children" do
       actual = p(~w[hello world])
-      expect = {"p", [], ["hello", "world"]}
+      expect = {"p", [], ["hello", "world"], %{}}
 
       assert actual == expect
     end
@@ -36,14 +36,14 @@ defmodule EarmarkAstDsl.ParaTest do
   describe "attributes" do
     test "empty" do
       actual = p(nil, %{a: 1})
-      expect = {"p", [{"a", "1"}], []}
+      expect = {"p", [{"a", "1"}], [], %{}}
 
       assert actual == expect
     end
 
     test "much more" do
       actual = p("", %{a: 1, b: 2})
-      expect = {"p", [{"a", "1"}, {"b", "2"}], [""]}
+      expect = {"p", [{"a", "1"}, {"b", "2"}], [""], %{}}
 
       assert actual == expect
     end

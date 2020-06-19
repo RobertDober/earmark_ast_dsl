@@ -1,7 +1,7 @@
 defmodule EarmarkAstDsl.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.2.0"
   @url "https://github.com/robertdober/earmark_ast_dsl"
 
   @description """

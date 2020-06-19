@@ -14,10 +14,10 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["one"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["one"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -35,16 +35,16 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["1-1"]},
-                 {"td", [{"style", "text-align: left;"}], ["1-2"]}
-               ]},
+                 {"td", [{"style", "text-align: left;"}], ["1-1"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["1-2"], %{}}
+               ], %{}},
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["2-1"]},
-                 {"td", [{"style", "text-align: left;"}], ["2-2"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["2-1"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["2-2"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -62,24 +62,24 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"th", [{"style", "text-align: left;"}], ["alpha"]},
-                 {"th", [{"style", "text-align: left;"}], ["beta"]}
-               ]}
-            ]},
+                 {"th", [{"style", "text-align: left;"}], ["alpha"], %{}},
+                 {"th", [{"style", "text-align: left;"}], ["beta"], %{}}
+               ], %{}}
+            ], %{}},
            {"tbody", [],
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["1-1"]},
-                 {"td", [{"style", "text-align: left;"}], ["1-2"]}
-               ]},
+                 {"td", [{"style", "text-align: left;"}], ["1-1"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["1-2"], %{}}
+               ], %{}},
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["2-1"]},
-                 {"td", [{"style", "text-align: left;"}], ["2-2"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["2-1"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["2-2"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -94,17 +94,17 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"th", [{"style", "text-align: left;"}], ["header"]}
-               ]}
-            ]},
+                 {"th", [{"style", "text-align: left;"}], ["header"], %{}}
+               ], %{}}
+            ], %{}},
            {"tbody", [],
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["data"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["data"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -119,14 +119,14 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["a"]}
-               ]},
+                 {"td", [{"style", "text-align: left;"}], ["a"], %{}}
+               ], %{}},
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -141,16 +141,16 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["a"]},
-                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
-               ]},
+                 {"td", [{"style", "text-align: left;"}], ["a"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"], %{}}
+               ], %{}},
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["d", "e"]},
-                 {"td", [{"style", "text-align: left;"}], ["f"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["d", "e"], %{}},
+                 {"td", [{"style", "text-align: left;"}], ["f"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
@@ -165,14 +165,14 @@ defmodule EarmarkAstDsl.TableTest do
             [
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["a"]}
-               ]},
+                 {"td", [{"style", "text-align: left;"}], ["a"], %{}}
+               ], %{}},
               {"tr", [],
                [
-                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
-               ]}
-            ]}
-         ]}
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"], %{}}
+               ], %{}}
+            ], %{}}
+         ], %{}}
 
       assert actual == expect
     end
