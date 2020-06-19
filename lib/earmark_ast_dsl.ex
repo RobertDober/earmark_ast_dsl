@@ -40,10 +40,10 @@ defmodule EarmarkAstDsl do
 
   """
 
-  @spec div(content_t(), free_atts_t()) :: ast_t()
+  @spec div(content_t(), free_atts_t()) :: astv1_t()
   def div(content \\ [], atts \\ []), do: tag("div", content, atts)
 
-  @spec p(content_t(), free_atts_t()) :: ast_t()
+  @spec p(content_t(), free_atts_t()) :: astv1_t()
   def p(content \\ [], atts \\ []), do: tag("p", content, atts)
 
   @doc """
@@ -133,7 +133,7 @@ defmodule EarmarkAstDsl do
         ], %{}}
 
   """
-  @spec table(table_t(), free_atts_t()) :: ast_t()
+  @spec table(table_t(), free_atts_t()) :: astv1_t()
   def table(rows, atts \\ [])
   def table(rows, atts) when is_binary(rows), do: table([rows], atts)
 
@@ -141,7 +141,7 @@ defmodule EarmarkAstDsl do
     tag("table", make_table(rows, atts), only_atts(atts))
   end
 
-  @spec tag(maybe(binary()), content_t(), free_atts_t()) :: ast_t()
+  @spec tag(maybe(binary()), content_t(), free_atts_t()) :: astv1_t()
   def tag(name, content \\ [], atts \\ [])
   def tag(name, nil, atts), do: tag(name, [], atts)
 

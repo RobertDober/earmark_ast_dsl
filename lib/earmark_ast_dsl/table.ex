@@ -4,7 +4,7 @@ defmodule EarmarkAstDsl.Table do
   use EarmarkAstDsl.Types
   import EarmarkAstDsl.Atts, only: [as_list: 1, to_attributes: 1]
 
-  @spec make_table(table_t(), Keyword.t(head: binaries())) :: ast_ts()
+  @spec make_table(table_t(), Keyword.t(head: binaries())) :: astv1_ts()
   def make_table(content, atts)
   def make_table(content, atts) when is_binary(content), do: _make_table_rows([[content]], atts)
 
@@ -14,7 +14,7 @@ defmodule EarmarkAstDsl.Table do
     |> _make_table_rows(atts)
   end
 
-  @spec _make_table_rows(matrix_t(), Keyword.t(head: binaries())) :: ast_ts()
+  @spec _make_table_rows(matrix_t(), Keyword.t(head: binaries())) :: astv1_ts()
   defp _make_table_rows(rows, atts)
 
   defp _make_table_rows(rows, atts) do
@@ -48,14 +48,14 @@ defmodule EarmarkAstDsl.Table do
   defp _make_row(string) when is_binary(string), do: [string]
   defp _make_row(row), do: row
 
-  @spec _make_table_body(matrix_t(), binaries()) :: ast_t()
+  @spec _make_table_body(matrix_t(), binaries()) :: astv1_t()
   defp _make_table_body(rows, text_aligns) do
     {"tbody", [],
      rows
      |> Enum.map(&_make_table_row(&1, text_aligns))}
   end
 
-  @spec _make_table_cell({scalar_t(), binary()}, binary()) :: ast_t()
+  @spec _make_table_cell({scalar_t(), binary()}, binary()) :: astv1_t()
   defp _make_table_cell(cell, tag)
 
   defp _make_table_cell({content, align}, tag) when is_tuple(content) do
@@ -66,7 +66,7 @@ defmodule EarmarkAstDsl.Table do
     {tag, [{"style", "text-align: #{align};"}], [content]}
   end
 
-  @spec _make_table_head(row_t(), binaries()) :: maybe(ast_t())
+  @spec _make_table_head(row_t(), binaries()) :: maybe(astv1_t())
   defp _make_table_head(cells, text_aligns)
   defp _make_table_head(nil, _text_aligns), do: nil
 
@@ -83,7 +83,7 @@ defmodule EarmarkAstDsl.Table do
      ]}
   end
 
-  @spec _make_table_row(row_t(), binaries()) :: ast_t()
+  @spec _make_table_row(row_t(), binaries()) :: astv1_t()
   defp _make_table_row(row, text_aligns)
 
   defp _make_table_row(row, text_aligns) when is_binary(row),

@@ -16,8 +16,10 @@ defmodule EarmarkAstDsl.Types do
 
       @type binaries :: list(binary())
       @type content_t :: tuple() | binary() | list()
-      @type ast_node :: ast_t() | binary()
-      @type ast_t :: { binary(), att_ts(), list(ast_node()) }
+      @type ast_node :: astv1_t() | binary()
+      @type astv1_t :: { binary(), att_ts(), list(ast_node()) }
+      @type astv1_ts :: list(astv1_t())
+      @type ast_t :: { binary(), att_ts(), list(ast_node()), map() }
       @type ast_ts :: list(ast_t())
 
       @type maybe(t) :: t | nil
