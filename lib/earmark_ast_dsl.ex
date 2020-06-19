@@ -36,14 +36,14 @@ defmodule EarmarkAstDsl do
       {"p", [], ["A para"], %{}}
 
       iex(5)> div(tag("span", "content"))
-      {"div", [], [{"span", [], ["content"]}], %{}}
+      {"div", [], [{"span", [], ["content"], %{}}], %{}}
 
   """
 
-  @spec div(content_t(), free_atts_t()) :: astv1_t()
+  @spec div(content_t(), free_atts_t()) :: ast_t()
   def div(content \\ [], atts \\ []), do: tag("div", content, atts)
 
-  @spec p(content_t(), free_atts_t()) :: astv1_t()
+  @spec p(content_t(), free_atts_t()) :: ast_t()
   def p(content \\ [], atts \\ []), do: tag("p", content, atts)
 
   @doc """
@@ -100,7 +100,7 @@ defmodule EarmarkAstDsl do
           {"tr", [], [
             {"td", [{"style", "text-align: right;"}], ["1-1"], %{}},
             {"td", [{"style", "text-align: center;"}], ["1-2"], %{}},
-          ]},
+          ], %{}},
           {"tr", [], [
             {"td", [{"style", "text-align: right;"}], ["2-1"], %{}},
             {"td", [{"style", "text-align: center;"}], ["2-2"], %{}},
@@ -127,13 +127,13 @@ defmodule EarmarkAstDsl do
               {"td", [{"style", "text-align: left;"}], ["alpha"], %{}},
             ], %{}},
             {"tr", [], [
-              {"td", [{"style", "text-align: left;"}], ["beta", {"em", [], ["gamma"]}], %{}}
+              {"td", [{"style", "text-align: left;"}], ["beta", {"em", [], ["gamma"], %{}}], %{}}
             ], %{}}
           ], %{}}
         ], %{}}
 
   """
-  @spec table(table_t(), free_atts_t()) :: astv1_t()
+  @spec table(table_t(), free_atts_t()) :: ast_t()
   def table(rows, atts \\ [])
   def table(rows, atts) when is_binary(rows), do: table([rows], atts)
 
@@ -141,14 +141,37 @@ defmodule EarmarkAstDsl do
     tag("table", make_table(rows, atts), only_atts(atts))
   end
 
-  @spec tag(maybe(binary()), content_t(), free_atts_t()) :: astv1_t()
-  def tag(name, content \\ [], atts \\ [])
-  def tag(name, nil, atts), do: tag(name, [], atts)
+  @doc """
 
-  def tag(name, content, atts) when is_binary(content) or is_tuple(content),
-    do: tag(name, [content], atts)
+  This is the base helper which emits a tag with its content, attributes and metadata can be added
+  at the user's convenience
 
-  def tag(name, content, atts) do
-    {to_string(name), make_atts(atts), content}
+        iex(10)> tag("div")
+        {"div", [], [], %{}}
+
+  With content,
+
+        iex(11)> tag("span", "hello")
+        {"span", [], ["hello"], %{}}
+
+  ... and attributes,
+
+        iex(12)> tag("code", "let it(:be_light)", [class: "inline"])
+        {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
+
+  ... and metadata
+
+        iex(13)> tag("div", "content", [], %{verbatim: true})
+        {"div", [], ["content"], %{verbatim: true}}
+  """
+  @spec tag(maybe(binary()), content_t(), free_atts_t(), map()) :: ast_t()
+  def tag(name, content \\ [], atts \\ [], meta \\ %{})
+  def tag(name, nil, atts, meta), do: tag(name, [], atts, meta)
+
+  def tag(name, content, atts, meta) when is_binary(content) or is_tuple(content),
+    do: tag(name, [content], atts, meta)
+
+  def tag(name, content, atts, meta) do
+    {to_string(name), make_atts(atts), content, meta}
   end
 end

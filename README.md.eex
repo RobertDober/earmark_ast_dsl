@@ -14,7 +14,7 @@ by adding `earmark_ast_dsl` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:earmark_ast_dsl, "~> 0.2.0"}
+    {:earmark_ast_dsl, "~> 0.2.1"}
   ]
 end
 ```
