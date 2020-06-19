@@ -141,6 +141,26 @@ very useful
         ], %{}}
       ], %{}}
 
+This is the base helper which emits a tag with its content, attributes and metadata can be added
+at the user's convenience
+
+      iex(10)> tag("div")
+      {"div", [], [], %{}}
+
+With content,
+
+      iex(11)> tag("span", "hello")
+      {"span", [], ["hello"], %{}}
+
+... and attributes,
+
+      iex(12)> tag("code", "let it(:be_light)", [class: "inline"])
+      {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
+
+... and metadata
+
+      iex(13)> tag("div", "content", [], %{verbatim: true})
+      {"div", [], ["content"], %{verbatim: true}}
 
 
 

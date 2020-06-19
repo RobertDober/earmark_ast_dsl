@@ -142,7 +142,6 @@ defmodule EarmarkAstDsl do
   end
 
   @doc """
-
   This is the base helper which emits a tag with its content, attributes and metadata can be added
   at the user's convenience
 
@@ -164,7 +163,7 @@ defmodule EarmarkAstDsl do
         iex(13)> tag("div", "content", [], %{verbatim: true})
         {"div", [], ["content"], %{verbatim: true}}
   """
-  @spec tag(maybe(binary()), content_t(), free_atts_t(), map()) :: ast_t()
+  @spec tag(maybe(binary()), maybe(content_t()), free_atts_t(), map()) :: ast_t()
   def tag(name, content \\ [], atts \\ [], meta \\ %{})
   def tag(name, nil, atts, meta), do: tag(name, [], atts, meta)
 
@@ -173,5 +172,24 @@ defmodule EarmarkAstDsl do
 
   def tag(name, content, atts, meta) do
     {to_string(name), make_atts(atts), content, meta}
+  end
+
+  @doc """
+  Void tags are just convenient shortcats for calls to `tag` with the second argument
+  `nil` or `[]`
+
+  One cannot pass metadata to a void_tag call
+
+
+        iex(14)> void_tag("hr")
+        {"hr", [], [], %{}}
+
+        iex(15)> void_tag("hr", class: "thin")
+        {"hr", [{"class", "thin"}], [], %{}}
+  """
+  @spec void_tag(binary(), free_atts_t()) :: ast_t() 
+  def void_tag(name, atts \\ [])
+  def void_tag(name, atts) do
+    tag(name, nil, atts) 
   end
 end

@@ -23,7 +23,7 @@ end
 
 <%= xtra.moduledoc("EarmarkAstDsl") %>
 
-<%= xtra.functiondoc("EarmarkAstDsl.table/2") %>
+<%= xtra.functiondoc(["EarmarkAstDsl.table/2", "EarmarkAstDsl.tag/4"]) %>
 
 
 Same doc can be found here (for latest release)
