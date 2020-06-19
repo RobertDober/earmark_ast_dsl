@@ -1,7 +1,7 @@
 defmodule EarmarkAstDsl.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
   @url "https://github.com/robertdober/earmark_ast_dsl"
 
   @description """
@@ -12,7 +12,11 @@ defmodule EarmarkAstDsl.MixProject do
   """
   def project do
     [
-      aliases: [docs: &build_docs/1],
+      aliases: [
+        docs: &build_docs/1,
+        check: ["dialyzer", "test"],
+        all: ["xtra", "docs"],
+      ],
       app: :earmark_ast_dsl,
       deps: deps(),
       description: @description,

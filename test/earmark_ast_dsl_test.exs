@@ -1,4 +1,4 @@
 defmodule EarmarkAstDslTest do
   use ExUnit.Case
-  doctest EarmarkAstDsl
+  doctest EarmarkAstDsl, import: true
 end

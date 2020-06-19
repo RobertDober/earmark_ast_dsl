@@ -105,6 +105,76 @@ defmodule EarmarkAstDsl.TableTest do
                ]}
             ]}
          ]}
+
+      assert actual == expect
+    end
+
+    test "amorph" do
+      actual = table(["a", {"b", "c"}])
+
+      expect =
+        {"table", [],
+         [
+           {"tbody", [],
+            [
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["a"]}
+               ]},
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
+               ]}
+            ]}
+         ]}
+
+      assert actual == expect
+    end
+
+    test "amorpher" do
+      actual = table([["a", {"b", "c"}], [{"d", "e"}, "f"]])
+
+      expect =
+        {"table", [],
+         [
+           {"tbody", [],
+            [
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["a"]},
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
+               ]},
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["d", "e"]},
+                 {"td", [{"style", "text-align: left;"}], ["f"]}
+               ]}
+            ]}
+         ]}
+
+      assert actual == expect
+    end
+
+    test "correct adaption of high level tuples" do
+      actual = table(["a", {"b", "c"}])
+
+      expect =
+        {"table", [],
+         [
+           {"tbody", [],
+            [
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["a"]}
+               ]},
+              {"tr", [],
+               [
+                 {"td", [{"style", "text-align: left;"}], ["b", "c"]}
+               ]}
+            ]}
+         ]}
+
+      assert actual == expect
     end
   end
 end
