@@ -192,4 +192,21 @@ defmodule EarmarkAstDsl do
   def void_tag(name, atts) do
     tag(name, nil, atts) 
   end
+
+  @doc """
+  vtags are tags from verbatim html
+
+        iex(16)> vtag("div", "hello")
+        {"div", [], ["hello"], %{verbatim: true}}
+
+  Attributes can be provided, of course
+
+        iex(17)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
+        {"div", [{"data-lang", "elixir"}], ["some", "content"], %{verbatim: true}}
+  """
+  @spec vtag(maybe(binary()), maybe(content_t()), free_atts_t()) :: ast_t()
+  def vtag(name, content \\ [], atts \\ [])
+  def vtag(name, content, atts) do
+    tag(name, content, atts, %{verbatim: true})
+  end
 end
