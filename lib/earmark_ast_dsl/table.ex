@@ -2,7 +2,7 @@ defmodule EarmarkAstDsl.Table do
   @moduledoc false
 
   use EarmarkAstDsl.Types
-  import EarmarkAstDsl.Atts, only: [as_list: 1, to_attributes: 1]
+  import EarmarkAstDsl.Atts, only: [as_list: 1]
 
   alias EarmarkAstDsl, as: Dsl
 

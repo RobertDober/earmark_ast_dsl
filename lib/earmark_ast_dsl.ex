@@ -224,7 +224,7 @@ defmodule EarmarkAstDsl do
   end
 
   @spec _tag_chain(list(String.t()), content_t(), free_atts_t()) :: ast_t() 
-  defp _tag_chain(tags, content, atts \\ []) do
+  defp _tag_chain(tags, content, atts) do
     tags
     |> Enum.reverse
     |> Enum.reduce(content, fn next, content -> [{next, make_atts(atts), content, %{}}] end)
