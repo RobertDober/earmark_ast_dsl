@@ -61,7 +61,7 @@ Content and attributes can be provided as arrays, ...
 Tables are probably the _raison d'être_ ot this little lib, as their ast is quite verbose, as we will see
 here:
 
-    iex(6)> table("one cell only") # and look at the output 
+    iex(7)> table("one cell only") # and look at the output 
     {"table", [], [
       {"tbody", [], [
         {"tr", [], [
@@ -72,7 +72,7 @@ here:
 
 Now if we want a header and have some more data:
 
-    iex(7)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
+    iex(8)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -95,9 +95,9 @@ Now if we want a header and have some more data:
 And tables can easily be aligned differently in Markdown, which makes some style helpers
 very useful
 
-    iex(8)> table([~w[1-1 1-2], ~w[2-1 2-2]],
-    ...(8)>        head: ~w[alpha beta],
-    ...(8)>        text_aligns: ~w[right center])
+    iex(9)> table([~w[1-1 1-2], ~w[2-1 2-2]],
+    ...(9)>        head: ~w[alpha beta],
+    ...(9)>        text_aligns: ~w[right center])
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -129,7 +129,7 @@ very useful
   where the first cell contains one element, but the second two, we can
   hint that we only want one by grouping into tuples
 
-      iex(9)> table(["alpha", {"beta", tag("em", "gamma")}])
+      iex(10)> table(["alpha", {"beta", tag("em", "gamma")}])
       {"table", [], [
         {"tbody", [], [
           {"tr", [], [
@@ -144,22 +144,22 @@ very useful
 This is the base helper which emits a tag with its content, attributes and metadata can be added
 at the user's convenience
 
-      iex(10)> tag("div")
+      iex(11)> tag("div")
       {"div", [], [], %{}}
 
 With content,
 
-      iex(11)> tag("span", "hello")
+      iex(12)> tag("span", "hello")
       {"span", [], ["hello"], %{}}
 
 ... and attributes,
 
-      iex(12)> tag("code", "let it(:be_light)", [class: "inline"])
+      iex(13)> tag("code", "let it(:be_light)", [class: "inline"])
       {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
 
 ... and metadata
 
-      iex(13)> tag("div", "content", [], %{verbatim: true})
+      iex(14)> tag("div", "content", [], %{verbatim: true})
       {"div", [], ["content"], %{verbatim: true}}
 
 
