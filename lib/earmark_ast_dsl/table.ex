@@ -8,7 +8,6 @@ defmodule EarmarkAstDsl.Table do
 
   @spec make_table(table_t(), Keyword.t(head: binaries())) :: ast_ts()
   def make_table(content, atts)
-  def make_table(content, atts) when is_binary(content), do: _make_table_rows([[content]], atts)
 
   def make_table(content, atts) when is_list(content) do
     content
@@ -84,9 +83,6 @@ defmodule EarmarkAstDsl.Table do
 
   @spec _make_table_row(row_t(), binaries()) :: ast_t()
   defp _make_table_row(row, text_aligns)
-
-  defp _make_table_row(row, text_aligns) when is_binary(row),
-    do: _make_table_row([row], text_aligns)
 
   defp _make_table_row(row, text_aligns) when is_tuple(row),
     do: _make_table_row([row], text_aligns)

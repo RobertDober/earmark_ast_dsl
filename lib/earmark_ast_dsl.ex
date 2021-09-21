@@ -264,7 +264,11 @@ defmodule EarmarkAstDsl do
 
   @doc """
   Again the annotated version is available
-        iex(22)> void_tag_annotated("wbr", "// for printer", class: "nine")
+
+        iex(22)> void_tag_annotated("br", "// break")
+        {"br", [], [], %{annotation: "// break"}}
+
+        iex(23)> void_tag_annotated("wbr", "// for printer", class: "nine")
         {"wbr", [{"class", "nine"}], [], %{annotation: "// for printer"}}
   """
   @spec void_tag_annotated(binary(), any(), free_atts_t()) :: ast_t()
@@ -274,12 +278,12 @@ defmodule EarmarkAstDsl do
   @doc """
   vtags are tags from verbatim html
 
-        iex(23)> vtag("div", "hello")
+        iex(24)> vtag("div", "hello")
         {"div", [], ["hello"], %{verbatim: true}}
 
   Attributes can be provided, of course
 
-        iex(24)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
+        iex(25)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
         {"div", [{"data-lang", "elixir"}], ["some", "content"], %{verbatim: true}}
   """
   @spec vtag(maybe(binary()), maybe(content_t()), free_atts_t()) :: ast_t()
@@ -291,12 +295,13 @@ defmodule EarmarkAstDsl do
   @doc """
   Verbatim tags still can be annotated and therefore we have this helper
 
-      iex(25)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
+      iex(26)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
       {"i", [{"printer", "no"}], ["emphasized"], %{annotation: "-- verbatim", verbatim: true}}
   """
   @spec vtag_annotated(binary(), maybe(content_t()), any(), free_atts_t()) :: ast_t()
-  def vtag_annotated(name, content, annotation, atts \\ []), do:
+  def vtag_annotated(name, content, annotation, atts \\ []) do
     tag(name, content, atts, %{annotation: annotation, verbatim: true})
+  end
 
   @spec _tag_chain(list(String.t()), content_t(), free_atts_t()) :: ast_t()
   defp _tag_chain(tags, content, atts) do
