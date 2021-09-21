@@ -5,7 +5,7 @@ and any changes you make in this file will most likely be lost
 -->
 
 
-# EarmarkAstDsl
+## EarmarkAstDsl
 
 
 [![CI](https://github.com/RobertDober/earmark_ast_dsl/workflows/CI/badge.svg)](https://github.com/RobertDober/earmark_ast_dsl/actions)
@@ -25,47 +25,101 @@ Documentation for `EarmarkAstDsl`.
 
 The most general helper is the tag function:
 
+```elixir
     iex(1)> tag("div", "Some content")
     {"div", [], ["Some content"], %{}}
+```
 
 Content and attributes can be provided as arrays, ...
 
+```elixir
     iex(2)> tag("p", ~w[Hello World], class: "hidden")
     {"p", [{"class", "hidden"}], ["Hello", "World"], %{}}
+```
 
 ... or maps:
 
+```elixir
     iex(3)> tag("p", ~w[Hello World], %{class: "hidden"})
     {"p", [{"class", "hidden"}], ["Hello", "World"], %{}}
-      
+```
+
+#### Annotations (as implemented in `EarmarkParser` >= v1.4.16)
+
+In order to not overload tha API for `tag/2`, `tag/3` and `tag/4` we offer the general
+`tag_annotated` function
+
+```elixir
+    iex(4)> tag_annotated("header", "content", "annotation")
+    {"header", [], ["content"], %{annotation: "annotation"}}
+```
+
+in this case atts come last
+
+```elixir
+    iex(5)> tag_annotated("header", "content", "annotation", class: "two")
+    {"header", [{"class", "two"}], ["content"], %{annotation: "annotation"}}
+```
 
 ### Shortcuts for `p` and `div`
 
-    iex(4)> p("A para")
-    {"p", [], ["A para"], %{}}
-
-    iex(5)> div(tag("span", "content"))
-    {"div", [], [{"span", [], ["content"], %{}}], %{}}
-
-
-
-## Installation
-
 ```elixir
-def deps do
-  [
-    {:earmark_ast_dsl, "~> 0.5.0"}
-  ]
-end
+    iex(6)> p("A para")
+    {"p", [], ["A para"], %{}}
 ```
 
+```elixir
+    iex(7)> div(tag("span", "content"))
+    {"div", [], [{"span", [], ["content"], %{}}], %{}}
+```
+
+#### Annotations
+
+```elixir
+    iex(8)> p_annotated("", "%% green")
+    {"p", [], [""], %{annotation: "%% green"}}
+```
+
+and with attributes
+
+```elixir
+    iex(9)> div_annotated("", "%% green", class: "five", data: 2)
+    {"div", [{"class", "five"}, {"data", "2"}], [""], %{annotation: "%% green"}}
+```
+
+More helpers, which are less common are described on their functiondocs
+
+
+
+### EarmarkAstDsl.pre_code/2
+
+
+  A convenient shortcut for the often occurring `<pre><code>` tag chain
+
+```elixir
+    iex(10)> pre_code("hello")
+    {"pre", [], [{"code", [], ["hello"], %{}}], %{}}
+```
+
+
+### EarmarkAstDsl.pre_code_annotated/3
+
+The annotation adding helper
+
+```elixir
+    iex(11)> pre_code_annotated("code", "@@lang=elixir")
+    {"pre", [], [{"code", [], ["code"], %{annotation: "@@lang=elixir"}}], %{}}
+```
+
+### EarmarkAstDsl.table/2
 
 ### Tables
 
 Tables are probably the _raison d'être_ ot this little lib, as their ast is quite verbose, as we will see
 here:
 
-    iex(7)> table("one cell only") # and look at the output 
+```elixir
+    iex(12)> table("one cell only") # and look at the output
     {"table", [], [
       {"tbody", [], [
         {"tr", [], [
@@ -73,10 +127,12 @@ here:
         ], %{}}
       ], %{}}
     ], %{}}
+```
 
 Now if we want a header and have some more data:
 
-    iex(8)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
+```elixir
+    iex(13)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -95,13 +151,15 @@ Now if we want a header and have some more data:
         ], %{}}
       ], %{}}
     ], %{}}
+```
 
 And tables can easily be aligned differently in Markdown, which makes some style helpers
 very useful
 
-    iex(9)> table([~w[1-1 1-2], ~w[2-1 2-2]],
-    ...(9)>        head: ~w[alpha beta],
-    ...(9)>        text_aligns: ~w[right center])
+```elixir
+    iex(14)> table([~w[1-1 1-2], ~w[2-1 2-2]],
+    ...(14)>        head: ~w[alpha beta],
+    ...(14)>        text_aligns: ~w[right center])
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -120,6 +178,7 @@ very useful
         ], %{}}
       ], %{}}
     ], %{}}
+```
 
   Some leeway is given for the determination of the number of columns,
   bear in mind that Markdown only supports regularly shaped tables with
@@ -129,11 +188,12 @@ very useful
 
           | alpha        |
           | beta *gamma* |
-  
+
   where the first cell contains one element, but the second two, we can
   hint that we only want one by grouping into tuples
 
-      iex(10)> table(["alpha", {"beta", tag("em", "gamma")}])
+```elixir
+      iex(15)> table(["alpha", {"beta", tag("em", "gamma")}])
       {"table", [], [
         {"tbody", [], [
           {"tr", [], [
@@ -144,28 +204,100 @@ very useful
           ], %{}}
         ], %{}}
       ], %{}}
+```
 
+
+### EarmarkAstDsl.tag/4
 
 This is the base helper which emits a tag with its content, attributes and metadata can be added
 at the user's convenience
 
-      iex(11)> tag("div")
+```elixir
+      iex(16)> tag("div")
       {"div", [], [], %{}}
+```
 
 With content,
 
-      iex(12)> tag("span", "hello")
+```elixir
+      iex(17)> tag("span", "hello")
       {"span", [], ["hello"], %{}}
+```
 
 ... and attributes,
 
-      iex(13)> tag("code", "let it(:be_light)", [class: "inline"])
+```elixir
+      iex(18)> tag("code", "let it(:be_light)", [class: "inline"])
       {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
+```
 
 ... and metadata
 
-      iex(14)> tag("div", "content", [], %{verbatim: true})
+```elixir
+      iex(19)> tag("div", "content", [], %{verbatim: true})
       {"div", [], ["content"], %{verbatim: true}}
+```
+
+### EarmarkAstDsl.tag_annotated/4
+
+A convience function for easy addition of an annotation to the meta map
+
+### EarmarkAstDsl.void_tag/2
+
+Void tags are just convenient shortcats for calls to `tag` with the second argument
+`nil` or `[]`
+
+One cannot pass metadata to a void_tag call
+
+
+```elixir
+      iex(20)> void_tag("hr")
+      {"hr", [], [], %{}}
+```
+
+```elixir
+      iex(21)> void_tag("hr", class: "thin")
+      {"hr", [{"class", "thin"}], [], %{}}
+```
+
+### EarmarkAstDsl.void_tag_annotated/3
+
+Again the annotated version is available
+
+```elixir
+      iex(22)> void_tag_annotated("br", "// break")
+      {"br", [], [], %{annotation: "// break"}}
+```
+
+```elixir
+      iex(23)> void_tag_annotated("wbr", "// for printer", class: "nine")
+      {"wbr", [{"class", "nine"}], [], %{annotation: "// for printer"}}
+```
+
+### EarmarkAstDsl.vtag/3
+
+vtags are tags from verbatim html
+
+```elixir
+      iex(24)> vtag("div", "hello")
+      {"div", [], ["hello"], %{verbatim: true}}
+```
+
+Attributes can be provided, of course
+
+```elixir
+      iex(25)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
+      {"div", [{"data-lang", "elixir"}], ["some", "content"], %{verbatim: true}}
+```
+
+### EarmarkAstDsl.vtag_annotated/4
+
+Verbatim tags still can be annotated and therefore we have this helper
+
+```elixir
+    iex(26)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
+    {"i", [{"printer", "no"}], ["emphasized"], %{annotation: "-- verbatim", verbatim: true}}
+```
 
 
 

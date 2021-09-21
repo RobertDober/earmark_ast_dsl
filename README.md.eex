@@ -1,19 +1,11 @@
 <%= xtra.do_not_edit_warning template: template %>
 
 
-<%= xtra.moduledoc "EarmarkAstDsl", headline: 2 %>
+<%= xtra.moduledoc "EarmarkAstDsl", headline: 2, wrap_code_blocks: "elixir" %>
 
-<%= xtra.functiondoc :all, module: "Earmark.AstDsl", headline: 3 %>
 
-## Installation
+<%= xtra.functiondoc :all, module: "EarmarkAstDsl", headline: 3, wrap_code_blocks: "elixir" %>
 
-```elixir
-def deps do
-  [
-    {:earmark_ast_dsl, "~> <%= xtra.version %>"}
-  ]
-end
-```
 
 Same doc can be found here (for latest release)
 

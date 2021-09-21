@@ -6,8 +6,8 @@ defmodule EarmarkAstDsl do
 
   @moduledoc """
 
-[![CI](https://github.com/RobertDober/earmark_ast_dsl/workflows/CI/badge.svg)](https://github.com/RobertDober/earmark_ast_dsl/actions)
-[![Coverage Status](https://coveralls.io/repos/github/RobertDober/earmark_ast_dsl/badge.svg?branch=master)](https://coveralls.io/github/RobertDober/earmark_ast_dsl?branch=master)
+  [![CI](https://github.com/RobertDober/earmark_ast_dsl/workflows/CI/badge.svg)](https://github.com/RobertDober/earmark_ast_dsl/actions)
+  [![Coverage Status](https://coveralls.io/repos/github/RobertDober/earmark_ast_dsl/badge.svg?branch=master)](https://coveralls.io/github/RobertDober/earmark_ast_dsl?branch=master)
   [![Hex.pm](https://img.shields.io/hexpm/v/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
   [![Hex.pm](https://img.shields.io/hexpm/dw/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
   [![Hex.pm](https://img.shields.io/hexpm/dt/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
@@ -86,8 +86,8 @@ defmodule EarmarkAstDsl do
 
     A convenient shortcut for the often occurring `<pre><code>` tag chain
 
-    iex(10)> pre_code("hello")
-    {"pre", [], [{"code", [], ["hello"], %{}}], %{}}
+      iex(10)> pre_code("hello")
+      {"pre", [], [{"code", [], ["hello"], %{}}], %{}}
 
   """
   @spec pre_code(content_t(), free_atts_t()) :: ast_t()
@@ -98,8 +98,8 @@ defmodule EarmarkAstDsl do
   @doc """
   The annotation adding helper
 
-    iex(11)> pre_code_annotated("code", "@@lang=elixir")
-    {"pre", [], [{"code", [], ["code"], %{annotation: "@@lang=elixir"}}], %{}}
+      iex(11)> pre_code_annotated("code", "@@lang=elixir")
+      {"pre", [], [{"code", [], ["code"], %{annotation: "@@lang=elixir"}}], %{}}
   """
   @spec pre_code_annotated(content_t(), any, free_atts_t()) :: ast_t()
   def pre_code_annotated(content, annotation, atts \\ []) do
