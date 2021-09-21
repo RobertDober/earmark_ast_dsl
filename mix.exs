@@ -1,7 +1,7 @@
 defmodule EarmarkAstDsl.MixProject do
   use Mix.Project
 
-  @version "0.2.6"
+  @version "0.3.0"
   @url "https://github.com/robertdober/earmark_ast_dsl"
 
   @description """
@@ -20,9 +20,16 @@ defmodule EarmarkAstDsl.MixProject do
       app: :earmark_ast_dsl,
       deps: deps(),
       description: @description,
-      elixir: "~> 1.7",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
+      test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
       version: @version
     ]
@@ -61,7 +68,8 @@ defmodule EarmarkAstDsl.MixProject do
   defp deps do
     [
       {:dialyxir, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:extractly, "~>0.1.5", only: [:dev]}
+      {:extractly, "~>0.5.0", only: [:dev]},
+      {:excoveralls, "~> 0.14.2", only: [:test]},
 
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}

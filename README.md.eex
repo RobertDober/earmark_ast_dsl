@@ -1,27 +1,18 @@
-# EarmarkAstDsl
+<%= xtra.do_not_edit_warning template: template %>
 
-[![Build Status](https://travis-ci.org/robertdober/earmark_ast_dsl.svg?branch=master)](https://travis-ci.org/robertdober/earmark_ast_dsl)
-[![Hex.pm](https://img.shields.io/hexpm/v/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
-[![Hex.pm](https://img.shields.io/hexpm/dw/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
-[![Hex.pm](https://img.shields.io/hexpm/dt/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
 
+<%= xtra.moduledoc "EarmarkAstDsl", headline: 1 %>
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `earmark_ast_dsl` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:earmark_ast_dsl, "~> 0.2.1"}
+    {:earmark_ast_dsl, "~> <%= xtra.version %>"}
   ]
 end
 ```
 
-## API
-
-<%= xtra.moduledoc("EarmarkAstDsl") %>
 
 <%= xtra.functiondoc(["EarmarkAstDsl.table/2", "EarmarkAstDsl.tag/4"]) %>
 
@@ -32,7 +23,7 @@ Same doc can be found here (for latest release)
 
 ## Author
 
-Copyright © 2020 Robert Dober
+Copyright © 2020,1 Robert Dober
 mailto: robert.dober@gmail.com
 
 # LICENSE
