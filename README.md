@@ -61,35 +61,45 @@ in this case atts come last
     {"header", [{"class", "two"}], ["content"], %{annotation: "annotation"}}
 ```
 
-### Shortcuts for `p` and `div`
+### Shortcuts for common tags (`a`, `div`, `p`)
 
 ```elixir
-    iex(6)> p("A para")
+    iex(6)> a("hello", href: "mylink")
+    {"a", [{"href", "mylink"}], ["hello"], %{}}
+```
+
+```elixir
+    iex(7)> p("A para")
     {"p", [], ["A para"], %{}}
 ```
 
 ```elixir
-    iex(7)> div(tag("span", "content"))
+    iex(8)> div(tag("span", "content"))
     {"div", [], [{"span", [], ["content"], %{}}], %{}}
 ```
 
-#### Annotations
-
-```elixir
-    iex(8)> p_annotated("", "%% green")
-    {"p", [], [""], %{annotation: "%% green"}}
-```
-
-and with attributes
-
-```elixir
-    iex(9)> div_annotated("", "%% green", class: "five", data: 2)
-    {"div", [{"class", "five"}, {"data", "2"}], [""], %{annotation: "%% green"}}
-```
 
 More helpers, which are less common are described on their functiondocs
 
 
+
+### EarmarkAstDsl.lis/1
+
+Creates a list of `li` itmes
+
+```elixir
+    iex(9)> lis(~W[alpha beta gamma])
+    [{"li", [], ["alpha"], %{}},
+    {"li", [], ["beta"], %{}},
+    {"li", [], ["gamma"], %{}}]
+```
+
+Which can typically be used in, well, a list
+
+```elixir
+    iex(10)> tag("ol", lis(["a", p("b")]))
+    {"ol", [], [{"li", [], ["a"], %{}}, {"li", [], [{"p", [], ["b"], %{}}], %{}}], %{}}
+```
 
 ### EarmarkAstDsl.pre_code/2
 
@@ -97,7 +107,7 @@ More helpers, which are less common are described on their functiondocs
   A convenient shortcut for the often occurring `<pre><code>` tag chain
 
 ```elixir
-    iex(10)> pre_code("hello")
+    iex(11)> pre_code("hello")
     {"pre", [], [{"code", [], ["hello"], %{}}], %{}}
 ```
 
@@ -107,7 +117,7 @@ More helpers, which are less common are described on their functiondocs
 The annotation adding helper
 
 ```elixir
-    iex(11)> pre_code_annotated("code", "@@lang=elixir")
+    iex(12)> pre_code_annotated("code", "@@lang=elixir")
     {"pre", [], [{"code", [], ["code"], %{annotation: "@@lang=elixir"}}], %{}}
 ```
 
@@ -119,7 +129,7 @@ Tables are probably the _raison d'être_ ot this little lib, as their ast is qui
 here:
 
 ```elixir
-    iex(12)> table("one cell only") # and look at the output
+    iex(13)> table("one cell only") # and look at the output
     {"table", [], [
       {"tbody", [], [
         {"tr", [], [
@@ -132,7 +142,7 @@ here:
 Now if we want a header and have some more data:
 
 ```elixir
-    iex(13)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
+    iex(14)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -157,9 +167,9 @@ And tables can easily be aligned differently in Markdown, which makes some style
 very useful
 
 ```elixir
-    iex(14)> table([~w[1-1 1-2], ~w[2-1 2-2]],
-    ...(14)>        head: ~w[alpha beta],
-    ...(14)>        text_aligns: ~w[right center])
+    iex(15)> table([~w[1-1 1-2], ~w[2-1 2-2]],
+    ...(15)>        head: ~w[alpha beta],
+    ...(15)>        text_aligns: ~w[right center])
     {"table", [], [
       {"thead", [], [
         {"tr", [], [
@@ -193,7 +203,7 @@ very useful
   hint that we only want one by grouping into tuples
 
 ```elixir
-      iex(15)> table(["alpha", {"beta", tag("em", "gamma")}])
+      iex(16)> table(["alpha", {"beta", tag("em", "gamma")}])
       {"table", [], [
         {"tbody", [], [
           {"tr", [], [
@@ -213,28 +223,28 @@ This is the base helper which emits a tag with its content, attributes and metad
 at the user's convenience
 
 ```elixir
-      iex(16)> tag("div")
+      iex(17)> tag("div")
       {"div", [], [], %{}}
 ```
 
 With content,
 
 ```elixir
-      iex(17)> tag("span", "hello")
+      iex(18)> tag("span", "hello")
       {"span", [], ["hello"], %{}}
 ```
 
 ... and attributes,
 
 ```elixir
-      iex(18)> tag("code", "let it(:be_light)", [class: "inline"])
+      iex(19)> tag("code", "let it(:be_light)", [class: "inline"])
       {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
 ```
 
 ... and metadata
 
 ```elixir
-      iex(19)> tag("div", "content", [], %{verbatim: true})
+      iex(20)> tag("div", "content", [], %{verbatim: true})
       {"div", [], ["content"], %{verbatim: true}}
 ```
 
@@ -251,12 +261,12 @@ One cannot pass metadata to a void_tag call
 
 
 ```elixir
-      iex(20)> void_tag("hr")
+      iex(21)> void_tag("hr")
       {"hr", [], [], %{}}
 ```
 
 ```elixir
-      iex(21)> void_tag("hr", class: "thin")
+      iex(22)> void_tag("hr", class: "thin")
       {"hr", [{"class", "thin"}], [], %{}}
 ```
 
@@ -265,12 +275,12 @@ One cannot pass metadata to a void_tag call
 Again the annotated version is available
 
 ```elixir
-      iex(22)> void_tag_annotated("br", "// break")
+      iex(23)> void_tag_annotated("br", "// break")
       {"br", [], [], %{annotation: "// break"}}
 ```
 
 ```elixir
-      iex(23)> void_tag_annotated("wbr", "// for printer", class: "nine")
+      iex(24)> void_tag_annotated("wbr", "// for printer", class: "nine")
       {"wbr", [{"class", "nine"}], [], %{annotation: "// for printer"}}
 ```
 
@@ -279,14 +289,14 @@ Again the annotated version is available
 vtags are tags from verbatim html
 
 ```elixir
-      iex(24)> vtag("div", "hello")
+      iex(25)> vtag("div", "hello")
       {"div", [], ["hello"], %{verbatim: true}}
 ```
 
 Attributes can be provided, of course
 
 ```elixir
-      iex(25)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
+      iex(26)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
       {"div", [{"data-lang", "elixir"}], ["some", "content"], %{verbatim: true}}
 ```
 
@@ -295,7 +305,7 @@ Attributes can be provided, of course
 Verbatim tags still can be annotated and therefore we have this helper
 
 ```elixir
-    iex(26)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
+    iex(27)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
     {"i", [{"printer", "no"}], ["emphasized"], %{annotation: "-- verbatim", verbatim: true}}
 ```
 
