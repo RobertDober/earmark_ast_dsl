@@ -1,4 +1,4 @@
-defmodule EarmarkAstDsl.MixProject do
+    defmodule EarmarkAstDsl.MixProject do
   use Mix.Project
 
   @version "0.3.0"
@@ -67,7 +67,7 @@ defmodule EarmarkAstDsl.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:dialyxir, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:extractly, "~>0.5.0", only: [:dev]},
       {:excoveralls, "~> 0.14.2", only: [:test]},
 
