@@ -49,7 +49,7 @@ defmodule EarmarkAstDsl do
       iex(5)> tag_annotated("header", "content", "annotation", class: "two")
       {"header", [{"class", "two"}], ["content"], %{annotation: "annotation"}}
 
-  ### Shortcuts for common tags (`a`, `div`, `p`)
+  ### Shortcuts for common tags (`a`, `div`, `li`, `p`)
 
       iex(6)> a("hello", href: "mylink")
       {"a", [{"href", "mylink"}], ["hello"], %{}}
@@ -59,6 +59,9 @@ defmodule EarmarkAstDsl do
 
       iex(8)> div(tag("span", "content"))
       {"div", [], [{"span", [], ["content"], %{}}], %{}}
+
+      iex(9)> li(p("hello"))
+      {"li", [], [{"p", [], ["hello"], %{}}], %{}}
 
 
   More helpers, which are less common are described on their functiondocs
@@ -71,19 +74,32 @@ defmodule EarmarkAstDsl do
   def div(content \\ [], atts \\ []), do: tag("div", content, atts)
 
   @spec div_annotated(content_t(), any(), free_atts_t()) :: ast_t()
-  def div_annotated(content, annotation, atts \\ []), do: tag_annotated("div", content, annotation, atts)
+  @doc ~S"""
+
+      iex(10)> div_annotated("content", "special", class: "special_class")
+      {"div", [{"class", "special_class"}], ["content"], %{annotation: "special"}}
+
+      iex(11)> div_annotated("content", "special")
+      {"div", [], ["content"], %{annotation: "special"}}
+
+  """
+  def div_annotated(content, annotation, atts \\ []),
+    do: tag_annotated("div", content, annotation, atts)
+
+  @spec li(content_t(), free_atts_t()) :: ast_t()
+  def li(content \\ [], atts \\ []), do: tag("li", content, atts)
 
   @doc ~S"""
   Creates a list of `li` itmes
 
-      iex(9)> lis(~W[alpha beta gamma])
+      iex(12)> lis(~W[alpha beta gamma])
       [{"li", [], ["alpha"], %{}},
       {"li", [], ["beta"], %{}},
       {"li", [], ["gamma"], %{}}]
 
   Which can typically be used in, well, a list
 
-      iex(10)> tag("ol", lis(["a", p("b")]))
+      iex(13)> tag("ol", lis(["a", p("b")]))
       {"ol", [], [{"li", [], ["a"], %{}}, {"li", [], [{"p", [], ["b"], %{}}], %{}}], %{}}
   """
   @spec lis(list(content_t())) :: [ast_t()]
@@ -92,17 +108,42 @@ defmodule EarmarkAstDsl do
     |> Enum.map(&tag("li", &1))
   end
 
+  @doc ~S"""
+  The `ol` helper is different in respect to other helpers as it wraps content elements into `li` tags if
+  necessary
+
+      iex(14)> ol(["hello", "world"])
+      {"ol", [], [{"li", [], ["hello"], %{}}, {"li", [], ["world"], %{}}], %{}}
+
+  but as mentioned _only_ if necessary so that we can refine `li` elements with attributes or meta if we want
+
+      iex(15)> ol(["hello", li("world", class: "global")])
+      {"ol", [], [{"li", [], ["hello"], %{}}, {"li", [{"class", "global"}], ["world"], %{}}], %{}}
+
+  """
+  @spec ol(content_t(), free_atts_t()) :: ast_t()
+  def ol(content \\ [], atts \\ []) do
+    tag("ol", content |> Enum.map(&_make_li_wrapper/1), atts)
+  end
+
   @spec p(content_t(), free_atts_t()) :: ast_t()
   def p(content \\ [], atts \\ []), do: tag("p", content, atts)
 
+  @doc ~S"""
+
+      iex(16)> p_annotated("text", "annotation")
+      {"p", [], ["text"], %{annotation: "annotation"}}
+
+  """
   @spec p_annotated(content_t(), any(), free_atts_t()) :: ast_t()
-  def p_annotated(content, annotation, atts \\ []), do: tag_annotated("p", content, annotation, atts)
+  def p_annotated(content, annotation, atts \\ []),
+    do: tag_annotated("p", content, annotation, atts)
 
   @doc """
 
     A convenient shortcut for the often occurring `<pre><code>` tag chain
 
-      iex(11)> pre_code("hello")
+      iex(17)> pre_code("hello")
       {"pre", [], [{"code", [], ["hello"], %{}}], %{}}
 
   """
@@ -114,15 +155,34 @@ defmodule EarmarkAstDsl do
   @doc """
   The annotation adding helper
 
-      iex(12)> pre_code_annotated("code", "@@lang=elixir")
+      iex(18)> pre_code_annotated("code", "@@lang=elixir")
       {"pre", [], [{"code", [], ["code"], %{annotation: "@@lang=elixir"}}], %{}}
   """
   @spec pre_code_annotated(content_t(), any, free_atts_t()) :: ast_t()
   def pre_code_annotated(content, annotation, atts \\ []) do
     case pre_code(content, atts) do
       {"pre", atts1, [{"code", atts2, content2, meta2}], meta1} ->
-        {"pre", atts1, [{"code", atts2, content2, Map.put(meta2, :annotation, annotation)}], meta1}
+        {"pre", atts1, [{"code", atts2, content2, Map.put(meta2, :annotation, annotation)}],
+         meta1}
     end
+  end
+
+  @doc ~S"""
+  The `ul` helper is different in respect to other helpers as it wraps content elements into `li` tags if
+  necessary
+
+      iex(14)> ul(["hello", "world"])
+      {"ul", [], [{"li", [], ["hello"], %{}}, {"li", [], ["world"], %{}}], %{}}
+
+  but as mentioned _only_ if necessary so that we can refine `li` elements with attributes or meta if we want
+
+      iex(15)> ul(["hello", li("world", class: "global")])
+      {"ul", [], [{"li", [], ["hello"], %{}}, {"li", [{"class", "global"}], ["world"], %{}}], %{}}
+
+  """
+  @spec ul(content_t(), free_atts_t()) :: ast_t()
+  def ul(content \\ [], atts \\ []) do
+    tag("ul", content |> Enum.map(&_make_li_wrapper/1), atts)
   end
 
   @doc """
@@ -131,7 +191,7 @@ defmodule EarmarkAstDsl do
   Tables are probably the _raison d'être_ ot this little lib, as their ast is quite verbose, as we will see
   here:
 
-      iex(13)> table("one cell only") # and look at the output
+      iex(19)> table("one cell only") # and look at the output
       {"table", [], [
         {"tbody", [], [
           {"tr", [], [
@@ -142,7 +202,7 @@ defmodule EarmarkAstDsl do
 
   Now if we want a header and have some more data:
 
-      iex(14)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
+      iex(20)> table([~w[1-1 1-2], ~w[2-1 2-2]], head: ~w[left right]) # This is quite verbose!
       {"table", [], [
         {"thead", [], [
           {"tr", [], [
@@ -165,9 +225,9 @@ defmodule EarmarkAstDsl do
   And tables can easily be aligned differently in Markdown, which makes some style helpers
   very useful
 
-      iex(15)> table([~w[1-1 1-2], ~w[2-1 2-2]],
-      ...(15)>        head: ~w[alpha beta],
-      ...(15)>        text_aligns: ~w[right center])
+      iex(21)> table([~w[1-1 1-2], ~w[2-1 2-2]],
+      ...(21)>        head: ~w[alpha beta],
+      ...(21)>        text_aligns: ~w[right center])
       {"table", [], [
         {"thead", [], [
           {"tr", [], [
@@ -199,7 +259,7 @@ defmodule EarmarkAstDsl do
     where the first cell contains one element, but the second two, we can
     hint that we only want one by grouping into tuples
 
-        iex(16)> table(["alpha", {"beta", tag("em", "gamma")}])
+        iex(22)> table(["alpha", {"beta", tag("em", "gamma")}])
         {"table", [], [
           {"tbody", [], [
             {"tr", [], [
@@ -224,22 +284,22 @@ defmodule EarmarkAstDsl do
   This is the base helper which emits a tag with its content, attributes and metadata can be added
   at the user's convenience
 
-        iex(17)> tag("div")
+        iex(23)> tag("div")
         {"div", [], [], %{}}
 
   With content,
 
-        iex(18)> tag("span", "hello")
+        iex(24)> tag("span", "hello")
         {"span", [], ["hello"], %{}}
 
   ... and attributes,
 
-        iex(19)> tag("code", "let it(:be_light)", [class: "inline"])
+        iex(25)> tag("code", "let it(:be_light)", [class: "inline"])
         {"code", [{"class", "inline"}], ["let it(:be_light)"], %{}}
 
   ... and metadata
 
-        iex(20)> tag("div", "content", [], %{verbatim: true})
+        iex(26)> tag("div", "content", [], %{verbatim: true})
         {"div", [], ["content"], %{verbatim: true}}
   """
   @spec tag(maybe(binary()), maybe(content_t()), free_atts_t(), map()) :: ast_t()
@@ -257,7 +317,8 @@ defmodule EarmarkAstDsl do
   A convience function for easy addition of an annotation to the meta map
   """
   @spec tag_annotated(binary(), maybe(content_t()), any(), free_atts_t()) :: ast_t()
-  def tag_annotated(name, content, annotation, atts \\ []), do: tag(name, content, atts, %{annotation: annotation})
+  def tag_annotated(name, content, annotation, atts \\ []),
+    do: tag(name, content, atts, %{annotation: annotation})
 
   @doc """
   Void tags are just convenient shortcats for calls to `tag` with the second argument
@@ -266,14 +327,15 @@ defmodule EarmarkAstDsl do
   One cannot pass metadata to a void_tag call
 
 
-        iex(21)> void_tag("hr")
+        iex(27)> void_tag("hr")
         {"hr", [], [], %{}}
 
-        iex(22)> void_tag("hr", class: "thin")
+        iex(28)> void_tag("hr", class: "thin")
         {"hr", [{"class", "thin"}], [], %{}}
   """
   @spec void_tag(binary(), free_atts_t()) :: ast_t()
   def void_tag(name, atts \\ [])
+
   def void_tag(name, atts) do
     tag(name, nil, atts)
   end
@@ -281,10 +343,10 @@ defmodule EarmarkAstDsl do
   @doc """
   Again the annotated version is available
 
-        iex(23)> void_tag_annotated("br", "// break")
+        iex(29)> void_tag_annotated("br", "// break")
         {"br", [], [], %{annotation: "// break"}}
 
-        iex(24)> void_tag_annotated("wbr", "// for printer", class: "nine")
+        iex(30)> void_tag_annotated("wbr", "// for printer", class: "nine")
         {"wbr", [{"class", "nine"}], [], %{annotation: "// for printer"}}
   """
   @spec void_tag_annotated(binary(), any(), free_atts_t()) :: ast_t()
@@ -294,16 +356,17 @@ defmodule EarmarkAstDsl do
   @doc """
   vtags are tags from verbatim html
 
-        iex(25)> vtag("div", "hello")
+        iex(31)> vtag("div", "hello")
         {"div", [], ["hello"], %{verbatim: true}}
 
   Attributes can be provided, of course
 
-        iex(26)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
+        iex(32)> vtag("div", ["some", "content"], [{"data-lang", "elixir"}])
         {"div", [{"data-lang", "elixir"}], ["some", "content"], %{verbatim: true}}
   """
   @spec vtag(maybe(binary()), maybe(content_t()), free_atts_t()) :: ast_t()
   def vtag(name, content \\ [], atts \\ [])
+
   def vtag(name, content, atts) do
     tag(name, content, atts, %{verbatim: true})
   end
@@ -311,7 +374,7 @@ defmodule EarmarkAstDsl do
   @doc """
   Verbatim tags still can be annotated and therefore we have this helper
 
-      iex(27)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
+      iex(33)> vtag_annotated("i", "emphasized", "-- verbatim", printer: "no")
       {"i", [{"printer", "no"}], ["emphasized"], %{annotation: "-- verbatim", verbatim: true}}
   """
   @spec vtag_annotated(binary(), maybe(content_t()), any(), free_atts_t()) :: ast_t()
@@ -319,12 +382,21 @@ defmodule EarmarkAstDsl do
     tag(name, content, atts, %{annotation: annotation, verbatim: true})
   end
 
+  @spec _make_li_wrapper(binary() | tuple()) :: ast_t()
+  defp _make_li_wrapper(content_element)
+  defp _make_li_wrapper({"li", _, _, _} = li), do: li
+
+  defp _make_li_wrapper(content_element) do
+    tag("li", content_element)
+  end
+
   @spec _tag_chain(list(String.t()), content_t(), free_atts_t()) :: ast_t()
   defp _tag_chain(tags, content, atts) do
     tags
-    |> Enum.reverse
+    |> Enum.reverse()
     |> Enum.reduce(content, fn next, content -> [{next, make_atts(atts), content, %{}}] end)
     |> hd()
   end
 end
+
 #  SPDX-License-Identifier: Apache-2.0
