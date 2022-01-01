@@ -6,7 +6,7 @@
 
   @moduledoc """
 
-  [![CI](https://github.com/RobertDober/earmark_ast_dsl/workflows/CI/badge.svg)](https://github.com/RobertDober/earmark_ast_dsl/actions)
+  [![CI](https://github.com/RobertDober/earmark_ast_dsl/actions/workflows/ci.yml/badge.svg)](https://github.com/RobertDober/earmark_ast_dsl/actions/workflows/ci.yml)
   [![Coverage Status](https://coveralls.io/repos/github/RobertDober/earmark_ast_dsl/badge.svg?branch=master)](https://coveralls.io/github/RobertDober/earmark_ast_dsl?branch=master)
   [![Hex.pm](https://img.shields.io/hexpm/v/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
   [![Hex.pm](https://img.shields.io/hexpm/dw/earmark_ast_dsl.svg)](https://hex.pm/packages/earmark_ast_dsl)
