@@ -20,7 +20,7 @@ defmodule EarmarkAstDsl.MixProject do
       app: :earmark_ast_dsl,
       deps: deps(),
       description: @description,
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       preferred_cli_env: [
