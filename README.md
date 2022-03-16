@@ -127,6 +127,15 @@ More helpers, which are less common are described on their functiondocs
 ```
 
 
+### EarmarkAstDsl.inline_code/2
+
+
+```elixir
+    iex(14)> inline_code("with x <- great_value() do")
+    {"code", [{"class", "inline"}], ["with x <- great_value() do"], %{}}
+```
+
+
 ### EarmarkAstDsl.lis/1
 
 Creates a list of `li` itmes

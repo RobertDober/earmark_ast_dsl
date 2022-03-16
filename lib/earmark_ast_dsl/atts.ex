@@ -21,10 +21,19 @@ defmodule EarmarkAstDsl.Atts do
     |> Enum.map(fn {k, v} -> {to_string(k), to_string(v)} end)
   end
 
+  @doc ~S"""
+      iex(1)> merge_atts(%{a: 1, b: 2}, b: 3, c: 4)
+      [a: 1, b: 3, c: 4]
+  """
+  @spec merge_atts(free_atts_t(), Keyword.t()) :: Keyword.t()
+  def merge_atts(atts, keywords) do
+    atts |> Enum.into([]) |> Keyword.merge(keywords)
+  end
+
   @doc """
   A convenience function to filter attributes
 
-      iex(1)> only_atts(%{:a => 1, "b" => 2})
+      iex(2)> only_atts(%{:a => 1, "b" => 2})
       [{"b", 2}]
   """
   @spec only_atts(free_atts_t()) :: att_ts()
@@ -38,10 +47,10 @@ defmodule EarmarkAstDsl.Atts do
   @doc """
   A convenience function to create attributes in list form
 
-      iex(2)> to_attributes([{"b", 2}, a: 1])
+      iex(3)> to_attributes([{"b", 2}, a: 1])
       [{"b", 2}, {"a", 1}]
 
-      iex(3)> to_attributes(%{:a => 1, "b" => 2})
+      iex(4)> to_attributes(%{:a => 1, "b" => 2})
       [{"a", 1}, {"b", 2}]
   """
   @spec to_attributes(free_atts_t()) :: att_ts()

@@ -1,6 +1,6 @@
-    defmodule EarmarkAstDsl do
+defmodule EarmarkAstDsl do
   import __MODULE__.Table, only: [make_table: 2]
-  import __MODULE__.Atts, only: [as_list: 1, make_atts: 1, only_atts: 1]
+  import __MODULE__.Atts, only: [as_list: 1, make_atts: 1, merge_atts: 2, only_atts: 1]
 
   use EarmarkAstDsl.Types
 
@@ -107,6 +107,17 @@
   def div_annotated(content, annotation, atts \\ []),
     do: tag_annotated("div", content, annotation, atts)
 
+  @doc ~S"""
+
+      iex(14)> inline_code("with x <- great_value() do")
+      {"code", [{"class", "inline"}], ["with x <- great_value() do"], %{}}
+
+  """
+  @spec inline_code(content_t(), free_atts_t()) :: ast_t()
+  def inline_code(content, atts \\ []) do
+    tag("code", content, merge_atts(atts, class: "inline"))
+  end
+
   @spec li(content_t(), free_atts_t()) :: ast_t()
   def li(content \\ [], atts \\ []), do: tag("li", content, atts)
 
@@ -169,6 +180,7 @@
   @spec p_annotated(content_t(), any(), free_atts_t()) :: ast_t()
   def p_annotated(content, annotation, atts \\ []),
     do: tag_annotated("p", content, annotation, atts)
+
 
   @doc """
 
