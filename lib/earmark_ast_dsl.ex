@@ -119,9 +119,9 @@ defmodule EarmarkAstDsl do
       {"code", [{"class", "inline"}], ["with x <- great_value() do"], %{}}
 
   """
-  @spec inline_code(content_t(), free_atts_t()) :: ast_t()
-  def inline_code(content, atts \\ []) do
-    tag("code", content, merge_atts(atts, class: "inline"))
+  @spec inline_code(content_t(), free_atts_t(), map()) :: ast_t()
+  def inline_code(content, atts \\ [], metadata \\ %{}) do
+    tag("code", content, merge_atts(atts, class: "inline"), metadata)
   end
 
   @spec li(content_t(), free_atts_t()) :: ast_t()
@@ -186,7 +186,6 @@ defmodule EarmarkAstDsl do
   @spec p_annotated(content_t(), any(), free_atts_t()) :: ast_t()
   def p_annotated(content, annotation, atts \\ []),
     do: tag_annotated("p", content, annotation, atts)
-
 
   @doc """
 
